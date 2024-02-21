@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absence;
+use App\Models\Employees;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
@@ -12,7 +13,10 @@ use PhpParser\Node\Stmt\Return_;
 
 class ApiController extends Controller
 {
-
+    public function index()
+    {
+        return view('IntegrationPage');
+    }
     public function getGuzzleRequest($endpoint = '', $query)
     {
         $client = new \GuzzleHttp\Client();
@@ -33,6 +37,34 @@ class ApiController extends Controller
             return $responses;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             dd($e->getMessage());
+        }
+    }
+    public function EmployeesIntegration()
+    {
+        $endpoint = '/hcmRestApi/resources/11.13.18.05/emps';
+        $limit = 100;
+        $offset = 0;
+        $data = [];
+        do {
+            $query = ['limit' => $limit, 'onlyData' => 'true', 'offset' => $offset];
+            $response = $this->getGuzzleRequest($endpoint, $query);
+            // dd($response);
+            $data = array_merge($data, $response->items);
+            $offset += $limit;
+        } while ($response->hasMore);
+        $dataToInsert = array_map(function ($response) {
+            return [
+                'FirstName' => $response->FirstName,
+                'LastName' => $response->LastName,
+                'WorkPhoneNumber' => $response->WorkPhoneNumber,
+                'WorkEmail' => $response->WorkEmail,
+                'NationalId' => $response->NationalId,
+                'PersonNumber' => $response->PersonNumber
+            ];
+        }, $data);
+        $dataChunks = array_chunk($dataToInsert, 500);
+        foreach ($dataChunks as $chunk) {
+            Employees::insertOrIgnore($chunk);
         }
     }
     public function Absences()
@@ -79,7 +111,7 @@ class ApiController extends Controller
         //     Absence::insertOrignore($data);
         // }
 
-        Session::flash('message', 'This is message!');
+        //  Session::flash('message', 'This is message!');
         // Record end time
         $endTime = microtime(true);
         // Calculate execution time
@@ -90,6 +122,7 @@ class ApiController extends Controller
 
         // return response()->json(['status' => 'success']);
     }
+
     public function workers()
     {
         $endpoint = '/hcmRestApi/resources/11.13.18.05/publicWorkers';

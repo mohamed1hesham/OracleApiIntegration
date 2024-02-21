@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AjaxController extends Controller
 {
-    public function pagination()
+    public function show_absence()
     {
         // [$all, $absences] = $this->mainPagination();
         //  $absences = Absence::latest()->paginate(15);
@@ -47,7 +47,7 @@ class AjaxController extends Controller
         return [$all, $absences];
     }
 
-    public function datatable(Request $request)
+    public function Absencedatatable(Request $request)
     {
         $draw = $request->get('draw');
         $start = $request->get('start');

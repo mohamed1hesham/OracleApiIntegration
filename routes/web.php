@@ -15,24 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('IntegrationPage');
-});
+Route::get('/', [ApiController::class, 'index']);
 Route::get('/request', [ApiController::class, 'Absences'])->name('request');
-Route::get('/show-absences', [AjaxController::class, 'pagination'])->name('show-absences');
+Route::get('/requestEmps', [ApiController::class, 'EmployeesIntegration'])->name('requestEmps');
+Route::get('/show-absences', [AjaxController::class, 'show_absence'])->name('show-absences');
+Route::post('/Absencedatatable', [AjaxController::class, "Absencedatatable"])->name('Absencedatatable');
 
 
-Route::get('b', function () {
-    return view('button');
-});
+
+
+
+
+
 
 Route::get('/show-json', [AjaxController::class, 'showAbsences']);
-
 Route::get('/request-workers', [ApiController::class, 'workers']);
-
-
 Route::get('/pagination/pagination-data', [AjaxController::class, 'pagination']);
 Route::get('/pagination/pagination-data2', [AjaxController::class, 'pagination2']);
-
-
-Route::post('/ajax-datatable', [AjaxController::class, "datatable"])->name('datatable');

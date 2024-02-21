@@ -59,7 +59,7 @@
                 processing: true,
 
                 ajax: {
-                    url: "{{ route('datatable') }}",
+                    url: "{{ route('Absencedatatable') }}",
                     type: "POST",
                     data: {
                         _token: "{{ csrf_token() }}",
