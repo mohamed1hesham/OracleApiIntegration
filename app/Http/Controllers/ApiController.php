@@ -21,10 +21,10 @@ class ApiController extends Controller
     {
         $client = new \GuzzleHttp\Client();
 
-        $base_url = 'https://fa-eush-test-saasfaprod1.fa.ocs.oraclecloud.com/';
+        $base_url = 'Enter instance base url';
         $url = $base_url . $endpoint;
-        $username = 'Oracle.Support';
-        $password = 'Crystal.123';
+        $username = 'username';
+        $password = 'pass';
 
         try {
             $response = $client->get($url, [

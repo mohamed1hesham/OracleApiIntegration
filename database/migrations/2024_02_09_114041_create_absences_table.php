@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('employer');
             $table->bigInteger('absenceTypeId');
             $table->bigInteger('personAbsenceEntryId')->unique();
-
             $table->timestamps();
         });
     }
